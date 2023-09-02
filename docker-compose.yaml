@@ -1,0 +1,15 @@
+version: '3.0'
+
+services:
+  grafana:
+    container_name: 'business-intelligence'
+    build:
+      context: ./.config
+    ports:
+      - 3000:3000/tcp
+    environment:
+      - GF_INSTALL_PLUGINS=marcusolsson-csv-datasource
+      - GF_PLUGIN_ALLOW_LOCAL_MODE=true
+    volumes:
+      - ./provisioning:/etc/grafana/provisioning
+      - ./data:/data
