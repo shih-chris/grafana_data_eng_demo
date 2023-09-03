@@ -5,3 +5,7 @@
 3. Scrape that endpoint with an OSS Prometheus Instance
 4. Remote write local Prometheus data to Grafana Cloud
 5. Build basic usage dashboards in Grafana Cloud
+
+## How to run
+1. Create an .env file (see .env.example for reference)
+2. Run `docker-compose up`
