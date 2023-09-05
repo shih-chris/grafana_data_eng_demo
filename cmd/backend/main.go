@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -24,9 +23,6 @@ var (
 )
 
 func recordMetrics() {
-	// TODO: Determine if recordMetrics can run on http request instead
-	time.Sleep(time.Second * 15)
-
 	// Get MySQL Results
 	dsTypeCounts := query.GetData()
 
