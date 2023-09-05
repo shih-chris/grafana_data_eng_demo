@@ -8,10 +8,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/shih-chris/grafana_data_eng_demo/pkg/types"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func GetData() string {
+func GetData() []types.DsTypeCount {
 	// Get MySQL Env Variables
 	mysqlDB := os.Getenv("MYSQL_DATABASE")
 	mysqlUser := os.Getenv("MYSQL_USER")
@@ -43,21 +45,21 @@ func GetData() string {
 		order by 2 desc
 	`
 
-	// Run SQL and create return string combining each row
-	var resultString string
+	// Run SQL and create return slice combining each row
+	var queryResult []types.DsTypeCount
 	rows, err := db.QueryContext(ctx, queryString)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var dsType string
-		var dsCount int64
-		if err := rows.Scan(&dsType, &dsCount); err != nil {
+		var recordType string
+		var recordCount int64
+		if err := rows.Scan(&recordType, &recordCount); err != nil {
 			log.Fatal(err)
 		}
-		resultString = resultString + fmt.Sprintf("Data Source Type: %s; Count: %d\n", dsType, dsCount)
+		queryResult = append(queryResult, types.DsTypeCount{DsType: recordType, DsCount: recordCount})
 	}
 
-	return resultString
+	return queryResult
 }

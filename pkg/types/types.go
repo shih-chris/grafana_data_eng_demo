@@ -1,6 +1,6 @@
 package types
 
-type dsTypeCount struct {
-	dsType  string
-	dsCount int64
+type DsTypeCount struct {
+	DsType  string
+	DsCount int64
 }

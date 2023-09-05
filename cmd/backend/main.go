@@ -10,7 +10,12 @@ import (
 
 func getMetrics(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("got /metrics request\n")
-	outputString := query.GetData()
+	dsTypeCounts := query.GetData()
+	var outputString string
+	for _, v := range dsTypeCounts {
+		outputString = outputString + fmt.Sprintf("Data Source Type: %s; Count: %d\n", v.DsType, v.DsCount)
+	}
+	// queryResult = resultString +
 	io.WriteString(w, outputString)
 }
 
