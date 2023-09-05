@@ -54,7 +54,7 @@ func GetData() []types.DsTypeCount {
 	defer rows.Close()
 	for rows.Next() {
 		var recordType string
-		var recordCount int64
+		var recordCount float64
 		if err := rows.Scan(&recordType, &recordCount); err != nil {
 			log.Fatal(err)
 		}

@@ -1,26 +1,44 @@
 package main
 
 import (
-	"fmt"
-	"io"
 	"net/http"
+	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/shih-chris/grafana_data_eng_demo/pkg/query"
 )
 
-func getMetrics(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("got /metrics request\n")
+// Create Gauge
+var (
+	dsTypesInstalled = promauto.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "datasource_types_installed",
+			Help: "Count of data sources installed aggregated by data source type",
+		},
+		[]string{
+			"dsType",
+		},
+	)
+)
+
+func recordMetrics() {
+	// TODO: Determine if recordMetrics can run on http request instead
+	time.Sleep(time.Second * 15)
+
+	// Get MySQL Results
 	dsTypeCounts := query.GetData()
-	var outputString string
+
+	// Set gauge values
 	for _, v := range dsTypeCounts {
-		outputString = outputString + fmt.Sprintf("Data Source Type: %s; Count: %d\n", v.DsType, v.DsCount)
+		dsTypesInstalled.WithLabelValues(v.DsType).Set(v.DsCount)
 	}
-	// queryResult = resultString +
-	io.WriteString(w, outputString)
 }
 
 func main() {
-	http.HandleFunc("/metrics", getMetrics)
+	recordMetrics()
 
+	http.Handle("/metrics", promhttp.Handler())
 	http.ListenAndServe(":2112", nil)
 }
