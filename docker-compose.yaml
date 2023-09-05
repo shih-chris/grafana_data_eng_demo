@@ -30,6 +30,7 @@ services:
       context: .
       dockerfile: cmd/backend/Dockerfile
     environment:
+      - MYSQL_HOST=grafana_db:3306
       - MYSQL_DATABASE=grafana
       - MYSQL_USER=grafana
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
