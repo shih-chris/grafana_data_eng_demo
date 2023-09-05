@@ -1,16 +1,17 @@
 package query
 
 import (
+	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"os"
-	"context"
-	"database/sql"
 	"time"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func getData () string {
+func GetData() string {
 	// Get MySQL Env Variables
 	mysqlDB := os.Getenv("MYSQL_DATABASE")
 	mysqlUser := os.Getenv("MYSQL_USER")
