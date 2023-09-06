@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -23,13 +24,24 @@ var (
 )
 
 func recordMetrics() {
-	// Get MySQL Results
-	dsTypeCounts := query.GetData()
+	go func() {
+		for {
+			// Get MySQL Results
+			dsTypeCounts := query.GetData()
 
-	// Set gauge values
-	for _, v := range dsTypeCounts {
-		dsTypesInstalled.WithLabelValues(v.DsType).Set(v.DsCount)
-	}
+			// Set gauge values
+			for _, v := range dsTypeCounts {
+				dsTypesInstalled.WithLabelValues(v.DsType).Set(v.DsCount)
+			}
+
+			// Pause for 15 seconds
+			time.Sleep(15 * time.Second)
+
+			// TODO: Figure out how to set counts to 0
+			// 		 when they no longer show up in results
+
+		}
+	}()
 }
 
 func main() {
