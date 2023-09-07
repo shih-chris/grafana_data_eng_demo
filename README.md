@@ -8,4 +8,5 @@
 
 ## How to run
 1. Create an .env file (see .env.example for reference)
-2. Run `docker-compose up`
+2. Build `docker-compose build`
+3. Run `docker-compose up`
